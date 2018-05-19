@@ -1,11 +1,12 @@
 mod defs;
+mod cube;
 
 fn main() {
-    println!(
-        "Hello, world! {} {} {} {:?}",
-        defs::N_MOVE,
-        defs::N_TWIST,
-        defs::N_CORNERS,
-        defs::cornerColor[0]
-    );
+    let mut c = cube::Cube::init();
+
+    c.print();
+    c.r_move();
+    c.r2_move();
+    c.r_move();
+    c.print();
 }

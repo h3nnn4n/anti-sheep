@@ -36,16 +36,16 @@ pub enum Color {
     B, // = 5
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Corner {
-    URF, // = 0
-    UFL, // = 1
-    ULB, // = 2
-    UBR, // = 3
-    DRB, // = 4
-    DFR, // = 5
-    DLF, // = 6
-    DBL, // = 7
+    URF = 0,
+    UFL = 1,
+    ULB = 2,
+    UBR = 3,
+    DRB = 4,
+    DFR = 5,
+    DLF = 6,
+    DBL = 7,
 }
 
 #[derive(Copy, Clone, Debug)]
