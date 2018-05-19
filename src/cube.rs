@@ -13,7 +13,7 @@ impl Cube {
 
     pub fn init() -> Cube {
         Cube {
-            o: [0, 0, 0, 0, 0, 0, 0, 0],
+            o: [0; 8],
             p: [
                 defs::Corner::URF, // 0
                 defs::Corner::UFL, // 1
