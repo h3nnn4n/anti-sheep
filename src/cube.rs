@@ -29,6 +29,46 @@ impl Cube {
         }
     }
 
+    pub fn from_i(&mut self, (_p, _o): (i64, i64)) {
+        let mut p = _p;
+        let mut o = _o;
+
+        for c in 0..8 {
+            self.p[c] = defs::int_to_corner((p % 8) as i32);
+            p /= 8;
+        }
+
+        for c in 0..8 {
+            self.o[c] = o % 3;
+            o /= 3;
+        }
+    }
+
+    pub fn to_i(&self) -> (i64, i64) {
+        let mut p = 0;
+        let mut o = 0;
+
+        for (k, v) in self.p.iter().enumerate() {
+            p += (*v as i64) * 8_i64.pow(k as u32);
+        }
+
+        for (k, v) in self.o.iter().enumerate() {
+            o += (*v as i64) * 3_i64.pow(k as u32);
+        }
+
+        (p, o)
+    }
+
+    pub fn solve(&mut self) {
+        let mut q = vec![self.to_i()];
+
+        loop {
+            if self.is_solved() {
+                return;
+            }
+        }
+    }
+
     pub fn rp_move(&mut self) {
         self.r_move();
         self.r2_move();
@@ -248,5 +288,17 @@ mod tests {
         c.random_shuffle(10);
 
         assert!(!c.is_solved());
+    }
+
+    #[test]
+    fn encode_decode() {
+        let mut c = super::Cube::init();
+        let mut c2 = super::Cube::init();
+
+        for _ in 0..100 {
+            c.random_shuffle(11);
+            c2.from_i(c.to_i());
+            assert_eq!(c, c2);
+        }
     }
 }
