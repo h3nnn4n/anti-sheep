@@ -86,3 +86,17 @@ pub const cornerColor: [[Color; 3]; 8] = [
 pub const N_MOVE: i64 = 9; //  number of possible face moves
 pub const N_TWIST: i64 = 729; //  3^6 possible corner orientations
 pub const N_CORNERS: i64 = 5040; //  7! corner permutations in phase 2
+
+pub fn int_to_corner(n: i32) -> Corner {
+    match n {
+        0 => Corner::URF,
+        1 => Corner::UFL,
+        2 => Corner::ULB,
+        3 => Corner::UBR,
+        4 => Corner::DRB,
+        5 => Corner::DFR,
+        6 => Corner::DLF,
+        7 => Corner::DBL,
+        _ => panic!("Invalid corner ID"),
+    }
+}
