@@ -116,7 +116,7 @@ impl Cube {
         }
     }
 
-    fn random_move(&mut self) {
+    pub fn random_move(&mut self) {
         let mut rng = rand::thread_rng();
         let n = rng.gen_range(0, 9);
 
@@ -137,13 +137,13 @@ impl Cube {
         }
     }
 
-    fn random_shuffle(&mut self, n: i32) {
+    pub fn random_shuffle(&mut self, n: i32) {
         for _ in 0..n {
             self.random_move();
         }
     }
 
-    fn is_solved(&self) -> bool {
+    pub fn is_solved(&self) -> bool {
         *self == Cube::init()
     }
 }
