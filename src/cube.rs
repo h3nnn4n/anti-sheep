@@ -1,3 +1,5 @@
+extern crate rand;
+use self::rand::Rng;
 use defs;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -113,6 +115,37 @@ impl Cube {
             self.o[i] = self.o[i] % 3;
         }
     }
+
+    fn random_move(&mut self) {
+        let mut rng = rand::thread_rng();
+        let n = rng.gen_range(0, 9);
+
+        match n {
+            0 => self.r_move(),
+            1 => self.r2_move(),
+            2 => self.rp_move(),
+
+            3 => self.u_move(),
+            4 => self.u2_move(),
+            5 => self.up_move(),
+
+            6 => self.f_move(),
+            7 => self.f2_move(),
+            8 => self.fp_move(),
+
+            _ => self.random_move(),
+        }
+    }
+
+    fn random_shuffle(&mut self, n: i32) {
+        for _ in 0..n {
+            self.random_move();
+        }
+    }
+
+    fn is_solved(&self) -> bool {
+        *self == Cube::init()
+    }
 }
 
 #[cfg(test)]
@@ -194,5 +227,26 @@ mod tests {
         }
 
         assert_eq!(c, c2);
+    }
+
+    #[test]
+    fn random_shuffle() {
+        let mut c = super::Cube::init();
+        let mut c2 = super::Cube::init();
+
+        c.random_shuffle(5);
+
+        assert_ne!(c, c2);
+    }
+
+    #[test]
+    fn is_solved() {
+        let mut c = super::Cube::init();
+
+        assert!(c.is_solved());
+
+        c.random_shuffle(10);
+
+        assert!(!c.is_solved());
     }
 }
