@@ -117,8 +117,6 @@ impl Cube {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn r_move() {
         let mut c = super::Cube::init();
