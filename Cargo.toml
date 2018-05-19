@@ -1,0 +1,6 @@
+[package]
+name = "anti-sheep"
+version = "0.1.0"
+authors = ["h3nnn4n <uber.renan@gmail.com>"]
+
+[dependencies]
