@@ -51,6 +51,14 @@ impl Cube {
         self.fix_orientation();
     }
 
+    pub fn u2_move(&mut self) {}
+
+    pub fn u_move(&mut self) {}
+
+    pub fn f2_move(&mut self) {}
+
+    pub fn f_move(&mut self) {}
+
     fn fix_orientation(&mut self) {
         for i in 0..8 {
             self.o[i] = self.o[i] % 3;
@@ -62,19 +70,45 @@ impl Cube {
 mod tests {
     use super::*;
 
-    fn r_move() {
+    #[test]
+    fn r_move_eq() {
         let mut c = super::Cube::init();
         let mut c2 = super::Cube::init();
 
         c.r_move();
+        assert_ne!(c, c2);
         c.r2_move();
+        assert_ne!(c, c2);
         c.r_move();
 
         assert_eq!(c, c2);
     }
 
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+    fn u_move_eq() {
+        let mut c = super::Cube::init();
+        let mut c2 = super::Cube::init();
+
+        c.u_move();
+        assert_ne!(c, c2);
+        c.u2_move();
+        assert_ne!(c, c2);
+        c.u_move();
+
+        assert_eq!(c, c2);
+    }
+
+    #[test]
+    fn f_move_eq() {
+        let mut c = super::Cube::init();
+        let mut c2 = super::Cube::init();
+
+        c.f_move();
+        assert_ne!(c, c2);
+        c.f2_move();
+        assert_ne!(c, c2);
+        c.f_move();
+
+        assert_eq!(c, c2);
     }
 }
