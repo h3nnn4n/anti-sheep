@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Facelet {
     U1, // = 0
     U2, // = 1
@@ -26,7 +26,7 @@ pub enum Facelet {
     B4, // = 23
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Color {
     U, // = 0
     R, // = 1
@@ -36,7 +36,7 @@ pub enum Color {
     B, // = 5
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Corner {
     URF, // = 0
     UFL, // = 1
@@ -48,7 +48,7 @@ pub enum Corner {
     DBL, // = 7
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Move {
     U1, // = 0
     U2, // = 1

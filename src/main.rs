@@ -2,9 +2,10 @@ mod defs;
 
 fn main() {
     println!(
-        "Hello, world! {} {} {}",
+        "Hello, world! {} {} {} {:?}",
         defs::N_MOVE,
         defs::N_TWIST,
-        defs::N_CORNERS
+        defs::N_CORNERS,
+        defs::cornerColor[0]
     );
 }
