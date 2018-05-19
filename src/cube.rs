@@ -27,6 +27,11 @@ impl Cube {
         }
     }
 
+    pub fn rp_move(&mut self) {
+        self.r_move();
+        self.r2_move();
+    }
+
     pub fn r2_move(&mut self) {
         self.r_move();
         self.r_move();
@@ -51,15 +56,32 @@ impl Cube {
         self.fix_orientation();
     }
 
+    pub fn up_move(&mut self) {
+        self.u_move();
+        self.u2_move();
+    }
+
     pub fn u2_move(&mut self) {
         self.u_move();
         self.u_move();
     }
 
     pub fn u_move(&mut self) {
+        self.o = [
+            self.o[3], self.o[0], self.o[1], self.o[2], self.o[4], self.o[5], self.o[6], self.o[7],
+        ];
+
         self.p = [
             self.p[3], self.p[0], self.p[1], self.p[2], self.p[4], self.p[5], self.p[6], self.p[7],
         ];
+
+        self.fix_orientation();
+    }
+
+    pub fn fp_move(&mut self) {
+        self.f_move();
+        self.f_move();
+        self.f_move();
     }
 
     pub fn f2_move(&mut self) {
@@ -98,7 +120,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn r_move_eq() {
+    fn r_move() {
         let mut c = super::Cube::init();
         let mut c2 = super::Cube::init();
 
@@ -109,10 +131,17 @@ mod tests {
         c.r_move();
 
         assert_eq!(c, c2);
+
+        c.rp_move();
+        c.rp_move();
+        c.rp_move();
+        c2.r_move();
+
+        assert_eq!(c, c2);
     }
 
     #[test]
-    fn u_move_eq() {
+    fn u_move() {
         let mut c = super::Cube::init();
         let mut c2 = super::Cube::init();
 
@@ -123,10 +152,17 @@ mod tests {
         c.u_move();
 
         assert_eq!(c, c2);
+
+        c.up_move();
+        c.up_move();
+        c.up_move();
+        c2.u_move();
+
+        assert_eq!(c, c2);
     }
 
     #[test]
-    fn f_move_eq() {
+    fn f_move() {
         let mut c = super::Cube::init();
         let mut c2 = super::Cube::init();
 
@@ -135,6 +171,29 @@ mod tests {
         c.f2_move();
         assert_ne!(c, c2);
         c.f_move();
+
+        assert_eq!(c, c2);
+
+        c2.f_move();
+        c2.f_move();
+        c2.f_move();
+        c.fp_move();
+
+        assert_eq!(c, c2);
+    }
+
+    #[test]
+    fn seq_test() {
+        let mut c = super::Cube::init();
+        let mut c2 = super::Cube::init();
+
+        for _ in 0..6 {
+            // R U R' U'
+            c.r_move();
+            c.u_move();
+            c.rp_move();
+            c.up_move();
+        }
 
         assert_eq!(c, c2);
     }
