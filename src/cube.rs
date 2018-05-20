@@ -69,7 +69,7 @@ impl Cube {
 
     pub fn solve(&self) -> Vec<defs::Move> {
         let mut q: VecDeque<(i64, i64)> = VecDeque::new();
-        let mut forward_path: HashMap<((i64, i64), defs::Move), (i64, i64)> = HashMap::new();
+        //let mut forward_path: HashMap<((i64, i64), defs::Move), (i64, i64)> = HashMap::new();
         let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
         let mut visited: HashSet<(i64, i64)> = HashSet::new();
         let mut c = Cube::init();
@@ -81,38 +81,41 @@ impl Cube {
 
             let c_i = c.to_i();
 
-            for i in 0..9 {
-                let m = defs::int_to_move(i);
+            let iter = if true {
+                defs::Move::iterator_htm()
+            } else {
+                defs::Move::iterator_ftm()
+            };
+
+            for m in iter {
                 let mut c2 = c.get_copy();
-                c2.do_move(m);
+                c2.do_move(*m);
 
                 if c2.is_solved() {
-                    forward_path.insert((c_i, m), c2.to_i());
-                    reverse_path.insert(c2.to_i(), (c_i, m));
+                    //forward_path.insert((c_i, m), c2.to_i());
+                    reverse_path.insert(c2.to_i(), (c_i, *m));
 
                     let mut path: Vec<defs::Move> = vec![];
 
-                    if true {
-                        let target = self.to_i();
-                        let mut m: defs::Move;
-                        let mut k = Cube::init().to_i();
+                    let target = self.to_i();
+                    let mut m: defs::Move;
+                    let mut k = Cube::init().to_i();
 
-                        while k != target {
-                            let a = *reverse_path.get(&k).unwrap();
-                            k = a.0;
-                            m = a.1;
-                            path.push(m);
-                        }
-
-                        path.reverse();
+                    while k != target {
+                        let a = *reverse_path.get(&k).unwrap();
+                        k = a.0;
+                        m = a.1;
+                        path.push(m);
                     }
+
+                    path.reverse();
 
                     return path;
                 } else {
                     if !visited.contains(&c2.to_i()) {
                         q.push_back(c2.to_i());
-                        forward_path.insert((c_i, m), c2.to_i());
-                        reverse_path.insert(c2.to_i(), (c_i, m));
+                        //forward_path.insert((c_i, *m), c2.to_i());
+                        reverse_path.insert(c2.to_i(), (c_i, *m));
                         visited.insert(c2.to_i());
                     }
                 }

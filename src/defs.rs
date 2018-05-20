@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 //#[derive(Copy, Clone, Debug)]
 //pub enum Facelet {
 //U1, // = 0
@@ -61,6 +63,88 @@ pub enum Move {
     F3, // = 8
 }
 
+impl Move {
+    pub fn iterator_ftm() -> Iter<'static, Move> {
+        static MOVES: [Move; 6] = [Move::U1, Move::U3, Move::R1, Move::R3, Move::F1, Move::F3];
+
+        MOVES.into_iter()
+    }
+
+    pub fn iterator_htm() -> Iter<'static, Move> {
+        static MOVES: [Move; 9] = [
+            Move::U1,
+            Move::U2,
+            Move::U3,
+            Move::R1,
+            Move::R2,
+            Move::R3,
+            Move::F1,
+            Move::F2,
+            Move::F3,
+        ];
+
+        MOVES.into_iter()
+    }
+
+    pub fn print_formated(seq: Vec<Move>) {
+        let formated = Move::format_move_sequence(seq);
+
+        for m in formated.iter() {
+            print!("{} ", *m);
+        }
+
+        println!();
+    }
+
+    pub fn format_move_sequence(seq: Vec<Move>) -> Vec<String> {
+        let simplified_move_sequece = Move::simplify_move_sequence(seq);
+        let mut formated: Vec<String> = Vec::new();
+
+        for mov in simplified_move_sequece.iter() {
+            formated.push(match *mov {
+                Move::U1 => "U ".to_string(),
+                Move::U2 => "U2".to_string(),
+                Move::U3 => "U'".to_string(),
+                Move::R1 => "R ".to_string(),
+                Move::R2 => "R2".to_string(),
+                Move::R3 => "R ".to_string(),
+                Move::F1 => "F'".to_string(),
+                Move::F2 => "F2".to_string(),
+                Move::F3 => "F'".to_string(),
+            })
+        }
+
+        formated
+    }
+
+    pub fn simplify_move_sequence(seq: Vec<Move>) -> Vec<Move> {
+        let mut seq2: Vec<Move> = Vec::new();
+
+        for (k, _) in seq.iter().enumerate() {
+            if k < seq.len() - 1 {
+                if seq[k] != seq[k + 1] {
+                    if k == 0 || seq[k - 1] != seq[k] {
+                        seq2.push(seq[k]);
+                    }
+                } else {
+                    seq2.push(match seq[k] {
+                        Move::R1 => Move::R2,
+                        Move::U1 => Move::U2,
+                        Move::F1 => Move::F2,
+                        _ => panic!("Unexpected repeated move"),
+                    })
+                }
+            } else {
+                if seq[k] != seq[k - 1] {
+                    seq2.push(seq[k]);
+                }
+            }
+        }
+
+        seq2
+    }
+}
+
 //pub const cornerFacelet: [[Facelet; 3]; 8] = [
 //[Facelet::U4, Facelet::R1, Facelet::F2],
 //[Facelet::U3, Facelet::F1, Facelet::L2],
@@ -113,5 +197,35 @@ pub fn int_to_move(n: i32) -> Move {
         7 => Move::F2,
         8 => Move::F3,
         _ => panic!("Invalid Move ID"),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use cube;
+
+    //#[test]
+    fn simplify() {
+        let mut c1 = cube::Cube::init();
+        let mut c2 = cube::Cube::init();
+
+        for _ in 0..5 {
+            c1.random_shuffle(10);
+            c2.copy(c1);
+
+            let solve_sequence = c1.solve();
+            let simplified_move_sequece =
+                super::Move::simplify_move_sequence(solve_sequence.clone());
+
+            for m in solve_sequence.iter() {
+                c1.do_move(*m);
+            }
+
+            for m in simplified_move_sequece.iter() {
+                c2.do_move(*m);
+            }
+
+            assert_eq!(c1, c2);
+        }
     }
 }

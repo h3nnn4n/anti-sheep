@@ -24,7 +24,8 @@ fn main() {
         c.do_move(*m);
     }
 
-    println!("{:?}", solve_sequence);
+    print!("Solution: ");
+    defs::Move::print_formated(solve_sequence);
 
     assert_eq!(c, c2);
 }
