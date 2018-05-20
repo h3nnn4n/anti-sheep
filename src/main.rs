@@ -1,16 +1,24 @@
 mod cube;
 mod defs;
 
+use std::time::{Duration, Instant};
+
 fn main() {
     let mut c = cube::Cube::init();
+    let mut c2 = cube::Cube::init();
 
-    //c.random_shuffle(3);
-    c.r_move();
-    c.u_move();
-    c.rp_move();
-    c.up_move();
+    c.random_shuffle(20);
 
+    let start_t = Instant::now();
     let solve_sequence = c.solve();
+    let end_t = Instant::now();
+
+    let delta = end_t - start_t;
+    println!(
+        "solver took: {}.{}s",
+        delta.as_secs(),
+        delta.subsec_millis()
+    );
 
     for m in solve_sequence.iter() {
         c.do_move(*m);
@@ -18,5 +26,5 @@ fn main() {
 
     println!("{:?}", solve_sequence);
 
-    c.print();
+    assert_eq!(c, c2);
 }
