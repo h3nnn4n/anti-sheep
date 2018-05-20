@@ -82,16 +82,15 @@ impl Cube {
                 c2.do_move(m);
 
                 if c2.is_solved() {
-                    println!("Solved cube");
                     forward_path.insert((c_i, m), c2.to_i());
                     reverse_path.insert(c2.to_i(), (c_i, m));
 
                     let mut path: Vec<defs::Move> = vec![];
+
                     if true {
                         let target = self.to_i();
                         let mut m = defs::Move::U1;
                         let mut k = Cube::init().to_i();
-                        let mut path: Vec<defs::Move> = Vec::new();
 
                         while k != target {
                             let a = *reverse_path.get(&k).unwrap();
@@ -99,6 +98,8 @@ impl Cube {
                             m = a.1;
                             path.push(m);
                         }
+
+                        path.reverse();
                     }
 
                     return path;
@@ -113,9 +114,7 @@ impl Cube {
             }
 
             if q.len() == 0 {
-                println!("Cube is unsolvable");
-                let v: Vec<defs::Move> = Vec::new();
-                return v;
+                panic!("Cube is unsolvable");
             }
         }
     }
@@ -377,5 +376,40 @@ mod tests {
             c2.from_i(c.to_i());
             assert_eq!(c, c2);
         }
+    }
+
+    fn solve(n: i32) -> bool {
+        let mut c = super::Cube::init();
+        let mut c2 = super::Cube::init();
+        c.random_shuffle(n);
+
+        let solve_sequence = c.solve();
+
+        for m in solve_sequence.iter() {
+            c.do_move(*m);
+        }
+
+        c == c2
+    }
+
+    macro_rules! solve_tests {
+    ($($name:ident: $value:expr,)*) => { $(
+        #[test]
+        fn $name() {
+            let n = $value;
+            for _ in 0..3 {
+                assert!(solve(n));
+            }
+        })*}
+    }
+
+    solve_tests! {
+        solve_1: (1),
+        solve_2: (2),
+        solve_3: (3),
+        solve_4: (4),
+        solve_5: (5),
+        solve_6: (6),
+        solve_7: (7),
     }
 }
