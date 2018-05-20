@@ -32,6 +32,11 @@ impl Cube {
         }
     }
 
+    pub fn from_string(&mut self, input: String) {
+        assert!(input.chars().count() == 24);
+        return;
+    }
+
     pub fn from_i(&mut self, (_p, _o): (i64, i64)) {
         let mut p = _p;
         let mut o = _o;
@@ -335,7 +340,7 @@ mod tests {
     #[test]
     fn seq_test() {
         let mut c = super::Cube::init();
-        let mut c2 = super::Cube::init();
+        let c2 = super::Cube::init();
 
         for _ in 0..6 {
             // R U R' U'
@@ -351,7 +356,7 @@ mod tests {
     #[test]
     fn random_shuffle() {
         let mut c = super::Cube::init();
-        let mut c2 = super::Cube::init();
+        let c2 = super::Cube::init();
 
         c.random_shuffle(5);
 
@@ -381,9 +386,16 @@ mod tests {
         }
     }
 
+    #[test]
+    #[should_panic]
+    fn from_string_wrong() {
+        let mut c = super::Cube::init();
+        c.from_string("HAHA".to_string());
+    }
+
     fn solve(n: i32) -> bool {
         let mut c = super::Cube::init();
-        let mut c2 = super::Cube::init();
+        let c2 = super::Cube::init();
         c.random_shuffle(n);
 
         let solve_sequence = c.solve();
@@ -407,12 +419,12 @@ mod tests {
     }
 
     solve_tests! {
-        solve_1: (1),
-        solve_2: (2),
-        solve_3: (3),
-        solve_4: (4),
-        solve_5: (5),
-        solve_6: (6),
-        solve_7: (7),
+        solve_1: 1,
+        solve_2: 2,
+        solve_3: 3,
+        solve_4: 4,
+        solve_5: 5,
+        solve_6: 6,
+        solve_7: 7,
     }
 }
