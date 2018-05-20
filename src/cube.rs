@@ -211,6 +211,9 @@ impl Cube {
     }
 
     fn fix_orientation(&mut self) {
+        let s: i64 = self.o.iter().sum();
+        assert!(s % 3 == 0);
+
         for i in 0..8 {
             self.o[i] = self.o[i] % 3;
         }
