@@ -1,11 +1,11 @@
 mod cube;
 mod defs;
 
-use std::time::{Duration, Instant};
+use std::time::Instant;
 
 fn main() {
     let mut c = cube::Cube::init();
-    let mut c2 = cube::Cube::init();
+    let c2 = cube::Cube::init();
 
     c.random_shuffle(20);
 

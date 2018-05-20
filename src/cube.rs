@@ -12,7 +12,7 @@ pub struct Cube {
 }
 
 impl Cube {
-    pub fn print(&self) {
+    pub fn _print(&self) {
         println!("{:?} {:?}", self.o, self.p);
     }
 
@@ -89,7 +89,7 @@ impl Cube {
 
                     if true {
                         let target = self.to_i();
-                        let mut m = defs::Move::U1;
+                        let mut m: defs::Move;
                         let mut k = Cube::init().to_i();
 
                         while k != target {
@@ -125,7 +125,7 @@ impl Cube {
 
     pub fn get_copy(&self) -> Cube {
         let mut c = Cube::init();
-        c.from_i(self.to_i());
+        c.copy(*self);
         c
     }
 
