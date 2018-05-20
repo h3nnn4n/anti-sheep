@@ -48,7 +48,7 @@ pub enum Corner {
     DBL = 7,
 }
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Move {
     U1, // = 0
     U2, // = 1
@@ -97,6 +97,21 @@ pub fn int_to_corner(n: i32) -> Corner {
         5 => Corner::DFR,
         6 => Corner::DLF,
         7 => Corner::DBL,
-        _ => panic!("Invalid corner ID"),
+        _ => panic!("Invalid Corner ID"),
+    }
+}
+
+pub fn int_to_move(n: i32) -> Move {
+    match n {
+        0 => Move::U1,
+        1 => Move::U2,
+        2 => Move::U3,
+        3 => Move::R1,
+        4 => Move::R1,
+        5 => Move::R1,
+        6 => Move::F1,
+        7 => Move::F2,
+        8 => Move::F3,
+        _ => panic!("Invalid Move ID"),
     }
 }

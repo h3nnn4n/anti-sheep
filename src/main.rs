@@ -1,12 +1,9 @@
-mod defs;
 mod cube;
+mod defs;
 
 fn main() {
     let mut c = cube::Cube::init();
 
-    c.print();
-    c.r_move();
-    c.r2_move();
-    c.r_move();
-    c.print();
+    c.random_shuffle(3);
+    c.solve();
 }

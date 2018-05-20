@@ -1,6 +1,9 @@
 extern crate rand;
 use self::rand::Rng;
 use defs;
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::collections::VecDeque;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Cube {
@@ -59,14 +62,72 @@ impl Cube {
         (p, o)
     }
 
-    pub fn solve(&mut self) {
-        let mut q = vec![self.to_i()];
+    pub fn solve(&self) -> Vec<defs::Move> {
+        let mut q: VecDeque<(i64, i64)> = VecDeque::new();
+        let mut forward_path: HashMap<((i64, i64), defs::Move), (i64, i64)> = HashMap::new();
+        let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
+        let mut visited: HashSet<(i64, i64)> = HashSet::new();
+        let mut c = Cube::init();
+
+        q.push_back(self.to_i());
 
         loop {
-            if self.is_solved() {
-                return;
+            c.from_i(q.pop_front().unwrap());
+
+            let c_i = c.to_i();
+
+            for i in 0..9 {
+                let m = defs::int_to_move(i);
+                let mut c2 = c.get_copy();
+                c2.do_move(m);
+
+                if c2.is_solved() {
+                    println!("Solved cube");
+                    forward_path.insert((c_i, m), c2.to_i());
+                    reverse_path.insert(c2.to_i(), (c_i, m));
+
+                    let mut path: Vec<defs::Move> = vec![];
+                    if true {
+                        let target = self.to_i();
+                        let mut m = defs::Move::U1;
+                        let mut k = Cube::init().to_i();
+                        let mut path: Vec<defs::Move> = Vec::new();
+
+                        while k != target {
+                            let a = *reverse_path.get(&k).unwrap();
+                            k = a.0;
+                            m = a.1;
+                            path.push(m);
+                        }
+                    }
+
+                    return path;
+                } else {
+                    if !visited.contains(&c2.to_i()) {
+                        q.push_back(c2.to_i());
+                        forward_path.insert((c_i, m), c2.to_i());
+                        reverse_path.insert(c2.to_i(), (c_i, m));
+                        visited.insert(c2.to_i());
+                    }
+                }
+            }
+
+            if q.len() == 0 {
+                println!("Cube is unsolvable");
+                let v: Vec<defs::Move> = Vec::new();
+                return v;
             }
         }
+    }
+
+    pub fn copy(&mut self, c: Cube) {
+        self.from_i(c.to_i());
+    }
+
+    pub fn get_copy(&self) -> Cube {
+        let mut c = Cube::init();
+        c.from_i(self.to_i());
+        c
     }
 
     pub fn rp_move(&mut self) {
@@ -153,6 +214,22 @@ impl Cube {
     fn fix_orientation(&mut self) {
         for i in 0..8 {
             self.o[i] = self.o[i] % 3;
+        }
+    }
+
+    pub fn do_move(&mut self, m: defs::Move) {
+        match m {
+            defs::Move::R1 => self.r_move(),
+            defs::Move::R2 => self.r2_move(),
+            defs::Move::R3 => self.rp_move(),
+
+            defs::Move::U1 => self.u_move(),
+            defs::Move::U2 => self.u2_move(),
+            defs::Move::U3 => self.up_move(),
+
+            defs::Move::F1 => self.f_move(),
+            defs::Move::F2 => self.f2_move(),
+            defs::Move::F3 => self.fp_move(),
         }
     }
 
