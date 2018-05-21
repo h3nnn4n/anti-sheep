@@ -7,7 +7,11 @@ fn main() {
     let mut c = cube::Cube::init();
     let c2 = cube::Cube::init();
 
-    c.random_shuffle(20);
+    //c.random_shuffle(20);
+    c.r_move();
+    c.u_move();
+    c.rp_move();
+    c.up_move();
 
     let start_t = Instant::now();
     let solve_sequence = c.solve();
@@ -25,7 +29,8 @@ fn main() {
     }
 
     print!("Solution: ");
-    defs::Move::print_formated(solve_sequence);
+    println!("{:?}", solve_sequence.clone());
+    //defs::Move::print_formated(solve_sequence);
 
     assert_eq!(c, c2);
 }

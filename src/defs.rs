@@ -96,6 +96,28 @@ impl Move {
         println!();
     }
 
+    pub fn reverse_move_sequence(seq: Vec<Move>) -> Vec<Move> {
+        let mut reverse: Vec<Move> = Vec::new();
+
+        for mov in seq.iter() {
+            reverse.push(match *mov {
+                Move::U1 => Move::U3,
+                Move::U2 => Move::U2,
+                Move::U3 => Move::U1,
+                Move::R1 => Move::R3,
+                Move::R2 => Move::R2,
+                Move::R3 => Move::R1,
+                Move::F1 => Move::F3,
+                Move::F2 => Move::F2,
+                Move::F3 => Move::F1,
+            })
+        }
+
+        reverse.reverse();
+
+        reverse
+    }
+
     pub fn format_move_sequence(seq: Vec<Move>) -> Vec<String> {
         let simplified_move_sequece = Move::simplify_move_sequence(seq);
         let mut formated: Vec<String> = Vec::new();
@@ -203,6 +225,32 @@ pub fn int_to_move(n: i32) -> Move {
 #[cfg(test)]
 mod tests {
     use cube;
+
+    #[test]
+    fn reverse() {
+        let mut c1 = cube::Cube::init();
+        let mut c2 = cube::Cube::init();
+
+        for _ in 0..5 {
+            c1.random_shuffle(8);
+
+            let solve_sequence = c1.solve();
+            let mut reverse_solve_sequence =
+                super::Move::reverse_move_sequence(solve_sequence.clone());
+
+            c1.copy(c2);
+
+            for m in solve_sequence.iter() {
+                c1.do_move(*m);
+            }
+
+            for m in reverse_solve_sequence.iter() {
+                c1.do_move(*m);
+            }
+
+            assert_eq!(c1, c2);
+        }
+    }
 
     //#[test]
     fn simplify() {

@@ -68,6 +68,96 @@ impl Cube {
     }
 
     pub fn solve(&self) -> Vec<defs::Move> {
+        self.solve_bfs()
+        //self.solve_double_headed_bfs()
+    }
+
+    pub fn solve_double_headed_bfs(&self) -> Vec<defs::Move> {
+        let mut forward_queue: VecDeque<(i64, i64)> = VecDeque::new();
+        let mut reverse_queue: VecDeque<(i64, i64)> = VecDeque::new();
+        let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
+        let mut forward_visited: HashSet<(i64, i64)> = HashSet::new();
+        let mut reverse_visited: HashSet<(i64, i64)> = HashSet::new();
+        let mut c = Cube::init();
+
+        forward_queue.push_back(self.to_i());
+        reverse_queue.push_back(Cube::init().to_i());
+
+        let iter = if true {
+            defs::Move::iterator_htm()
+        } else {
+            defs::Move::iterator_ftm()
+        };
+
+        loop {
+            //// Forward BFS
+            //if forward_queue.len() == 0 {
+            //panic!("Cube is unsolvable");
+            //} else {
+            //c.from_i(forward_queue.pop_front().unwrap());
+
+            //for m in iter.clone() {
+            //let mut c2 = c.get_copy();
+            //c2.do_move(*m);
+
+            //if c2.is_solved() {
+            //let mut path: Vec<defs::Move> = vec![];
+
+            //return path;
+            //} else {
+            //if !forward_visited.contains(&c2.to_i()) {
+            //forward_queue.push_back(c2.to_i());
+            //reverse_path.insert(c2.to_i(), (c.to_i(), *m));
+            //forward_visited.insert(c2.to_i());
+            //}
+            //}
+            //}
+            //}
+
+            //backward BFS
+            if reverse_queue.len() == 0 {
+                panic!("Cube is unsolvable");
+            } else {
+                //println!("Hhaa");
+                c.from_i(reverse_queue.pop_front().unwrap());
+                //println!("{:?}", c);
+
+                for m in iter.clone() {
+                    let mut c2 = c.get_copy();
+                    c2.do_move(*m);
+
+                    if c2 == *self {
+                        reverse_path.insert(c2.to_i(), (c.to_i(), *m));
+
+                        let mut path: Vec<defs::Move> = vec![];
+
+                        let mut k = self.to_i();
+                        let mut m: defs::Move;
+                        let target = Cube::init().to_i();
+
+                        while k != target {
+                            let a = *reverse_path.get(&k).unwrap();
+                            k = a.0;
+                            m = a.1;
+                            path.push(m);
+                        }
+
+                        //path.reverse();
+
+                        return path;
+                    } else {
+                        if !reverse_visited.contains(&c2.to_i()) {
+                            reverse_queue.push_back(c2.to_i());
+                            reverse_path.insert(c2.to_i(), (c.to_i(), *m));
+                            reverse_visited.insert(c2.to_i());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    pub fn solve_bfs(&self) -> Vec<defs::Move> {
         let mut q: VecDeque<(i64, i64)> = VecDeque::new();
         //let mut forward_path: HashMap<((i64, i64), defs::Move), (i64, i64)> = HashMap::new();
         let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
@@ -426,8 +516,8 @@ mod tests {
         solve_2: 2,
         solve_3: 3,
         solve_4: 4,
-        solve_5: 5,
-        solve_6: 6,
-        solve_7: 7,
+        //solve_5: 5,
+        //solve_6: 6,
+        //solve_7: 7,
     }
 }
