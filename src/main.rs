@@ -14,7 +14,13 @@ fn main() {
     c.up_move();
 
     let start_t = Instant::now();
-    let solve_sequence = c.solve();
+    println!("Solution: ");
+    let solve_sequence = c.solve_forward_bfs();
+    println!("{:?}", solve_sequence.clone());
+    let solve_sequence2 = c.solve_reverse_bfs();
+    println!("{:?}", solve_sequence2.clone());
+    //let solve_sequence3 = c.solve_double_headed_bfs();
+    //println!("{:?}", solve_sequence3.clone());
     let end_t = Instant::now();
 
     let delta = end_t - start_t;
@@ -28,8 +34,6 @@ fn main() {
         c.do_move(*m);
     }
 
-    print!("Solution: ");
-    println!("{:?}", solve_sequence.clone());
     //defs::Move::print_formated(solve_sequence);
 
     assert_eq!(c, c2);
