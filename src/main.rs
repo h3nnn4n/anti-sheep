@@ -10,8 +10,8 @@ fn main() {
     //c.random_shuffle(20);
     c.r_move();
     c.u_move();
-    c.rp_move();
-    c.up_move();
+    //c.rp_move();
+    //c.up_move();
 
     let start_t = Instant::now();
     println!("Solution: ");
@@ -19,8 +19,8 @@ fn main() {
     println!("{:?}", solve_sequence.clone());
     let solve_sequence2 = c.solve_reverse_bfs();
     println!("{:?}", solve_sequence2.clone());
-    //let solve_sequence3 = c.solve_double_headed_bfs();
-    //println!("{:?}", solve_sequence3.clone());
+    let solve_sequence3 = c.solve_double_headed_bfs();
+    println!("{:?}", solve_sequence3.clone());
     let end_t = Instant::now();
 
     let delta = end_t - start_t;

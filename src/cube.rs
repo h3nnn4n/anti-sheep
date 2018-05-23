@@ -77,6 +77,7 @@ impl Cube {
         let mut forward_queue: VecDeque<(i64, i64)> = VecDeque::new();
         let mut reverse_queue: VecDeque<(i64, i64)> = VecDeque::new();
         let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
+        let mut forward_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
         let mut forward_visited: HashSet<(i64, i64)> = HashSet::new();
         let mut reverse_visited: HashSet<(i64, i64)> = HashSet::new();
         let mut path: Vec<defs::Move> = vec![];
@@ -104,14 +105,14 @@ impl Cube {
 
                     if forward_visited.contains(&c2.to_i()) && reverse_visited.contains(&c2.to_i())
                     {
-                        forward_visited.insert(c2.to_i());
+                        forward_path.insert(c2.to_i(), (c.to_i(), *m));
                         c.copy(c2);
                         println!("Break Forward");
                         break 'main_loop;
                     } else {
                         if !forward_visited.contains(&c2.to_i()) {
                             forward_queue.push_back(c2.to_i());
-                            reverse_path.insert(c2.to_i(), (c.to_i(), *m));
+                            forward_path.insert(c2.to_i(), (c.to_i(), *m));
                             forward_visited.insert(c2.to_i());
                         }
                     }
@@ -145,36 +146,60 @@ impl Cube {
             }
         }
 
-        //let target = self.to_i();
-        let target = c.to_i();
+        let mut path_forward: Vec<defs::Move> = vec![];
         let mut m: defs::Move;
-        let mut k = Cube::init().to_i();
+
+        let target = self.to_i();
+        let mut k = c.to_i();
+
+        println!("{:?}", forward_path.get(&c.to_i()));
+        println!("{:?}", forward_path.get(&self.to_i()));
+        println!("{:?}", forward_path.get(&Cube::init().to_i()));
+
+        for (k, v) in forward_path {
+            if v == c.to_i() {
+                println!("{:?}", c.to_i());
+            }
+        }
 
         while k != target {
+            print!("{:?}", k);
+            let a = *forward_path.get(&k).unwrap();
+            k = a.0;
+            m = a.1;
+            println!(" {:?}", m);
+            path_forward.push(m);
+        }
+
+        path_forward.reverse();
+
+        println!("{:?}", path_forward);
+
+        //let target = c.to_i();
+        //let mut k = self.to_i();
+
+        let target = self.to_i();
+        let mut k = c.to_i();
+
+        println!("{:?}", reverse_path);
+
+        println!("{:?}", reverse_path.get(&c.to_i()));
+        println!("{:?}", reverse_path.get(&self.to_i()));
+        println!("{:?}", reverse_path.get(&Cube::init().to_i()));
+
+        while k != target {
+            print!("{:?}", k);
             let a = *reverse_path.get(&k).unwrap();
             k = a.0;
             m = a.1;
+            println!(" {:?}", m);
             path.push(m);
         }
 
         path.reverse();
+        return defs::Move::reverse_move_sequence(path);
 
-        //let mut k = self.to_i();
-        //let mut m: defs::Move;
-        //let target = c.to_i();
-
-        //while k != target {
-        //println!("{:?}", k);
-        //let a = *reverse_path.get(&k).unwrap();
-        //k = a.0;
-        //m = a.1;
-        //path.push(m);
-        //}
-
-        //path.reverse();
-        //return defs::Move::reverse_move_sequence(path);
-
-        path
+        //path
     }
 
     pub fn solve_reverse_bfs(&self) -> Vec<defs::Move> {
@@ -220,7 +245,7 @@ impl Cube {
 
                         path.reverse();
 
-                        return path;
+                        return defs::Move::reverse_move_sequence(path);
                     } else {
                         if !reverse_visited.contains(&c2.to_i()) {
                             reverse_queue.push_back(c2.to_i());
@@ -557,6 +582,27 @@ mod tests {
     fn from_string_wrong() {
         let mut c = super::Cube::init();
         c.from_string("HAHA".to_string());
+    }
+
+    fn compare_solvers() {
+        let mut c1 = super::Cube::init();
+        let mut c2 = super::Cube::init();
+
+        c1.random_shuffle(10);
+        c2.copy(c1);
+
+        let solve_sequence1 = c1.solve_forward_bfs();
+        let solve_sequence2 = c2.solve_reverse_bfs();
+
+        for m in solve_sequence1.iter() {
+            c1.do_move(*m);
+        }
+
+        for m in solve_sequence2.iter() {
+            c2.do_move(*m);
+        }
+
+        assert_eq!(c1, c2);
     }
 
     fn solve(n: i32) -> bool {
