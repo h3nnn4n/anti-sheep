@@ -4,6 +4,7 @@ use defs;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::collections::VecDeque;
+use std::panic;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Cube {
@@ -103,21 +104,48 @@ impl Cube {
                     let mut c2 = c.get_copy();
                     c2.do_move(*m);
 
-                    if forward_visited.contains(&c2.to_i()) && reverse_visited.contains(&c2.to_i())
+                    println!(" - forward path: {:?} {:?} {:?}", c2.to_i(), c.to_i(), *m);
+
+                    if (forward_visited.contains(&c2.to_i())
+                        && reverse_visited.contains(&c2.to_i()))
+                        || c2.is_solved()
                     {
                         forward_path.insert(c2.to_i(), (c.to_i(), *m));
-                        c.copy(c2);
+                        //c.copy(c2);
                         println!("Break Forward");
+                        println!(" = forward path: {:?} {:?} {:?}", c2.to_i(), c.to_i(), *m);
+
+                        let mut path: Vec<defs::Move> = vec![];
+                        let mut m: defs::Move;
+
+                        let target = self.to_i();
+                        let mut k = Cube::init().to_i();
+
+                        while k != target {
+                            let a = *forward_path.get(&k).unwrap();
+                            k = a.0;
+                            m = a.1;
+                            path.push(m);
+                        }
+
+                        path.reverse();
+
+                        return path;
                         break 'main_loop;
                     } else {
                         if !forward_visited.contains(&c2.to_i()) {
                             forward_queue.push_back(c2.to_i());
                             forward_path.insert(c2.to_i(), (c.to_i(), *m));
+                            reverse_path.insert(c.to_i(), (c2.to_i(), *m));
+                            //forward_path.insert(c.to_i(), (c2.to_i(), *m));
+                            //reverse_path.insert(c2.to_i(), (c.to_i(), *m));
                             forward_visited.insert(c2.to_i());
                         }
                     }
                 }
             }
+
+            continue;
 
             //backward BFS
             if reverse_queue.len() == 0 {
@@ -129,16 +157,22 @@ impl Cube {
                     let mut c2 = c.get_copy();
                     c2.do_move(*m);
 
+                    println!(" + reverse path: {:?} {:?} {:?}", c2.to_i(), c.to_i(), *m);
+
                     if forward_visited.contains(&c2.to_i()) && reverse_visited.contains(&c2.to_i())
                     {
                         reverse_path.insert(c2.to_i(), (c.to_i(), *m));
                         c.copy(c2);
                         println!("Break Reverse");
+                        println!(" _ reverse path: {:?} {:?} {:?}", c2.to_i(), c.to_i(), *m);
                         break 'main_loop;
                     } else {
                         if !reverse_visited.contains(&c2.to_i()) {
                             reverse_queue.push_back(c2.to_i());
-                            reverse_path.insert(c2.to_i(), (c.to_i(), *m));
+                            forward_path.insert(c2.to_i(), (c.to_i(), *m));
+                            reverse_path.insert(c.to_i(), (c2.to_i(), *m));
+                            //forward_path.insert(c.to_i(), (c2.to_i(), *m));
+                            //reverse_path.insert(c2.to_i(), (c.to_i(), *m));
                             reverse_visited.insert(c2.to_i());
                         }
                     }
@@ -149,27 +183,41 @@ impl Cube {
         let mut path_forward: Vec<defs::Move> = vec![];
         let mut m: defs::Move;
 
-        let target = self.to_i();
-        let mut k = c.to_i();
+        //let target = self.to_i();
+        //let mut k = Cube::init().to_i();
 
-        println!("{:?}", forward_path.get(&c.to_i()));
-        println!("{:?}", forward_path.get(&self.to_i()));
-        println!("{:?}", forward_path.get(&Cube::init().to_i()));
+        //let mut k = self.to_i();
+        //let target = Cube::init().to_i();
 
-        for (k, v) in forward_path {
-            if v == c.to_i() {
-                println!("{:?}", c.to_i());
-            }
-        }
+        //println!("");
+        //println!("{:?}", forward_path.get(&c.to_i()));
+        //println!("{:?}", forward_path.get(&self.to_i()));
+        //println!("{:?}", forward_path.get(&Cube::init().to_i()));
+        //println!("");
+        //println!("{:?}", reverse_path.get(&c.to_i()));
+        //println!("{:?}", reverse_path.get(&self.to_i()));
+        //println!("{:?}", reverse_path.get(&Cube::init().to_i()));
+        //println!("");
+
+        //for (_k, (v, _m)) in forward_path.clone() {
+        //if v == c.to_i() {
+        //println!("{:?}", c.to_i());
+        //}
+        //}
+
+        //let _r = panic::catch_unwind(|| {
+        let mut k = self.to_i();
+        let target = Cube::init().to_i();
 
         while k != target {
             print!("{:?}", k);
-            let a = *forward_path.get(&k).unwrap();
+            let a = *reverse_path.get(&k).unwrap();
             k = a.0;
             m = a.1;
             println!(" {:?}", m);
-            path_forward.push(m);
+            //path_forward.push(m);
         }
+        //});
 
         path_forward.reverse();
 
@@ -178,28 +226,28 @@ impl Cube {
         //let target = c.to_i();
         //let mut k = self.to_i();
 
-        let target = self.to_i();
-        let mut k = c.to_i();
+        //let target = self.to_i();
+        //let mut k = c.to_i();
 
-        println!("{:?}", reverse_path);
+        //println!("{:?}", reverse_path);
 
-        println!("{:?}", reverse_path.get(&c.to_i()));
-        println!("{:?}", reverse_path.get(&self.to_i()));
-        println!("{:?}", reverse_path.get(&Cube::init().to_i()));
+        //println!("{:?}", reverse_path.get(&c.to_i()));
+        //println!("{:?}", reverse_path.get(&self.to_i()));
+        //println!("{:?}", reverse_path.get(&Cube::init().to_i()));
 
-        while k != target {
-            print!("{:?}", k);
-            let a = *reverse_path.get(&k).unwrap();
-            k = a.0;
-            m = a.1;
-            println!(" {:?}", m);
-            path.push(m);
-        }
+        //while k != target {
+        //print!("{:?}", k);
+        //let a = *reverse_path.get(&k).unwrap();
+        //k = a.0;
+        //m = a.1;
+        //println!(" {:?}", m);
+        //path.push(m);
+        //}
 
-        path.reverse();
-        return defs::Move::reverse_move_sequence(path);
+        //path.reverse();
+        //return defs::Move::reverse_move_sequence(path);
 
-        //path
+        path
     }
 
     pub fn solve_reverse_bfs(&self) -> Vec<defs::Move> {
