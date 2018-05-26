@@ -5,36 +5,35 @@ use std::time::Instant;
 
 fn main() {
     let mut c = cube::Cube::init();
-    let c2 = cube::Cube::init();
 
-    //c.random_shuffle(20);
-    c.r_move();
-    c.u_move();
-    //c.rp_move();
-    //c.up_move();
+    //for _ in 0..20 {
+    loop {
+        c.random_shuffle(50);
 
-    let start_t = Instant::now();
-    println!("Solution: ");
-    let solve_sequence = c.solve_forward_bfs();
-    println!("{:?}", solve_sequence.clone());
-    let solve_sequence2 = c.solve_reverse_bfs();
-    println!("{:?}", solve_sequence2.clone());
-    let solve_sequence3 = c.solve_double_headed_bfs();
-    println!("{:?}", solve_sequence3.clone());
-    let end_t = Instant::now();
+        let t1 = Instant::now();
+        let solve_sequence = c.solve_forward_bfs();
+        let e1 = Instant::now();
 
-    let delta = end_t - start_t;
-    println!(
-        "solver took: {}.{}s",
-        delta.as_secs(),
-        delta.subsec_millis()
-    );
+        let t2 = Instant::now();
+        let solve_sequence2 = c.solve_reverse_bfs();
+        let e2 = Instant::now();
 
-    for m in solve_sequence.iter() {
-        c.do_move(*m);
+        let t3 = Instant::now();
+        let solve_sequence3 = c.solve_double_headed_bfs();
+        let e3 = Instant::now();
+
+        let s1 = e1 - t1;
+        let s2 = e2 - t2;
+        let s3 = e3 - t3;
+
+        println!(
+            "{}.{} {}.{} {}.{}",
+            s1.as_secs(),
+            s1.subsec_millis(),
+            s2.as_secs(),
+            s2.subsec_millis(),
+            s3.as_secs(),
+            s3.subsec_millis(),
+        );
     }
-
-    //defs::Move::print_formated(solve_sequence);
-
-    assert_eq!(c, c2);
 }
