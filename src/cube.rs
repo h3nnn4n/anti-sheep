@@ -447,14 +447,32 @@ impl Cube {
     }
 
     pub fn fp_move(&mut self) {
-        self.f_move();
-        self.f_move();
-        self.f_move();
+        self.o = [
+            self.o[5] + 1,
+            self.o[0] + 2,
+            self.o[2],
+            self.o[3],
+            self.o[4],
+            self.o[6] + 2,
+            self.o[1] + 1,
+            self.o[7],
+        ];
+
+        self.p = [
+            self.p[5], self.p[0], self.p[2], self.p[3], self.p[4], self.p[6], self.p[1], self.p[7],
+        ];
+
+        self.fix_orientation();
     }
 
     pub fn f2_move(&mut self) {
-        self.f_move();
-        self.f_move();
+        self.o = [
+            self.o[6], self.o[5], self.o[2], self.o[3], self.o[4], self.o[1], self.o[0], self.o[7],
+        ];
+
+        self.p = [
+            self.p[6], self.p[5], self.p[2], self.p[3], self.p[4], self.p[1], self.p[0], self.p[7],
+        ];
     }
 
     pub fn f_move(&mut self) {
