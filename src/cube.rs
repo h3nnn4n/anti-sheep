@@ -32,6 +32,10 @@ impl Cube {
         }
     }
 
+    pub fn reset(&mut self) {
+        *self = Cube::init();
+    }
+
     pub fn from_string(&mut self, input: String) {
         assert!(input.chars().count() == 24);
         return;
@@ -415,31 +419,34 @@ impl Cube {
         let mut rng = rand::thread_rng();
         let n = rng.gen_range(0, 9);
 
-        match n {
-            0 => self.r_move(),
-            1 => self.r2_move(),
-            2 => self.rp_move(),
-
-            3 => self.u_move(),
-            4 => self.u2_move(),
-            5 => self.up_move(),
-
-            6 => self.f_move(),
-            7 => self.f2_move(),
-            8 => self.fp_move(),
-
-            _ => self.random_move(),
-        }
+        self.do_move(defs::int_to_move(n));
     }
 
     pub fn random_shuffle(&mut self, n: i32) {
+        let mut rng = rand::thread_rng();
+        let mut m = rng.gen_range(0, 9);
+        let mut last = defs::int_to_move(m);
+        let mut mov = last;
+
         for _ in 0..n {
-            self.random_move();
+            last = mov;
+            while mov == last {
+                m = rng.gen_range(0, 9);
+                mov = defs::int_to_move(m);
+            }
+
+            self.do_move(mov);
         }
     }
 
     pub fn is_solved(&self) -> bool {
         *self == Cube::init()
+    }
+
+    pub fn do_move_sequence(&mut self, seq: Vec<defs::Move>) {
+        for m in seq.iter() {
+            self.do_move(*m);
+        }
     }
 }
 
@@ -529,9 +536,12 @@ mod tests {
         let mut c = super::Cube::init();
         let c2 = super::Cube::init();
 
-        c.random_shuffle(5);
+        for _ in 0..50 {
+            c.reset();
+            c.random_shuffle(50);
 
-        assert_ne!(c, c2);
+            assert_ne!(c, c2);
+        }
     }
 
     #[test]
@@ -540,7 +550,7 @@ mod tests {
 
         assert!(c.is_solved());
 
-        c.random_shuffle(10);
+        c.random_shuffle(50);
 
         assert!(!c.is_solved());
     }
@@ -551,7 +561,7 @@ mod tests {
         let mut c2 = super::Cube::init();
 
         for _ in 0..100 {
-            c.random_shuffle(11);
+            c.random_shuffle(50);
             c2.from_i(c.to_i());
             assert_eq!(c, c2);
         }
@@ -565,48 +575,38 @@ mod tests {
     }
 
     #[test]
-    fn compare_solver_backward_double_headed() {
+    fn compare_solver_forward_double_headed() {
         let mut c1 = super::Cube::init();
         let mut c2 = super::Cube::init();
 
-        for _ in 0..20 {
+        for _ in 0..10 {
             c1.random_shuffle(5);
             c2.copy(c1);
 
             let solve_sequence1 = c1.solve_double_headed_bfs();
-            let solve_sequence2 = c2.solve_reverse_bfs();
+            let solve_sequence2 = c2.solve_forward_bfs();
 
-            for m in solve_sequence1.iter() {
-                c1.do_move(*m);
-            }
-
-            for m in solve_sequence2.iter() {
-                c2.do_move(*m);
-            }
+            c1.do_move_sequence(solve_sequence1);
+            c2.do_move_sequence(solve_sequence2);
 
             assert_eq!(c1, c2);
         }
     }
 
     #[test]
-    fn compare_solver_backward_forward() {
+    fn compare_solver_reverse_double_headed() {
         let mut c1 = super::Cube::init();
         let mut c2 = super::Cube::init();
 
-        for _ in 0..20 {
+        for _ in 0..10 {
             c1.random_shuffle(5);
             c2.copy(c1);
 
-            let solve_sequence1 = c1.solve_forward_bfs();
+            let solve_sequence1 = c1.solve_double_headed_bfs();
             let solve_sequence2 = c2.solve_reverse_bfs();
 
-            for m in solve_sequence1.iter() {
-                c1.do_move(*m);
-            }
-
-            for m in solve_sequence2.iter() {
-                c2.do_move(*m);
-            }
+            c1.do_move_sequence(solve_sequence1);
+            c2.do_move_sequence(solve_sequence2);
 
             assert_eq!(c1, c2);
         }
@@ -615,13 +615,12 @@ mod tests {
     fn solve(n: i32) -> bool {
         let mut c = super::Cube::init();
         let c2 = super::Cube::init();
+
         c.random_shuffle(n);
 
         let solve_sequence = c.solve();
 
-        for m in solve_sequence.iter() {
-            c.do_move(*m);
-        }
+        c.do_move_sequence(solve_sequence);
 
         c == c2
     }
@@ -631,7 +630,7 @@ mod tests {
         #[test]
         fn $name() {
             let n = $value;
-            for _ in 0..3 {
+            for _ in 0..5 {
                 assert!(solve(n));
             }
         })*}

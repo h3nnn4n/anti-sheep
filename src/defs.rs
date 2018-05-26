@@ -240,38 +240,8 @@ mod tests {
 
             c1.copy(c2);
 
-            for m in solve_sequence.iter() {
-                c1.do_move(*m);
-            }
-
-            for m in reverse_solve_sequence.iter() {
-                c1.do_move(*m);
-            }
-
-            assert_eq!(c1, c2);
-        }
-    }
-
-    //#[test]
-    fn simplify() {
-        let mut c1 = cube::Cube::init();
-        let mut c2 = cube::Cube::init();
-
-        for _ in 0..5 {
-            c1.random_shuffle(10);
-            c2.copy(c1);
-
-            let solve_sequence = c1.solve();
-            let simplified_move_sequece =
-                super::Move::simplify_move_sequence(solve_sequence.clone());
-
-            for m in solve_sequence.iter() {
-                c1.do_move(*m);
-            }
-
-            for m in simplified_move_sequece.iter() {
-                c2.do_move(*m);
-            }
+            c1.do_move_sequence(solve_sequence);
+            c1.do_move_sequence(reverse_solve_sequence);
 
             assert_eq!(c1, c2);
         }
