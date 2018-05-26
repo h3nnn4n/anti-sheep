@@ -367,13 +367,34 @@ impl Cube {
     }
 
     pub fn rp_move(&mut self) {
-        self.r_move();
-        self.r2_move();
+        self.o = [
+            self.o[3] + 2,
+            self.o[1],
+            self.o[2],
+            self.o[4] + 1,
+            self.o[5] + 2,
+            self.o[0] + 1,
+            self.o[6],
+            self.o[7],
+        ];
+
+        self.p = [
+            self.p[3], self.p[1], self.p[2], self.p[4], self.p[5], self.p[0], self.p[6], self.p[7],
+        ];
+
+        self.fix_orientation();
     }
 
     pub fn r2_move(&mut self) {
-        self.r_move();
-        self.r_move();
+        self.o = [
+            self.o[4], self.o[1], self.o[2], self.o[5], self.o[0], self.o[3], self.o[6], self.o[7],
+        ];
+
+        self.p = [
+            self.p[4], self.p[1], self.p[2], self.p[5], self.p[0], self.p[3], self.p[6], self.p[7],
+        ];
+
+        self.fix_orientation();
     }
 
     pub fn r_move(&mut self) {
@@ -530,6 +551,14 @@ mod tests {
         c2.r_move();
 
         assert_eq!(c, c2);
+
+        c.reset();
+        c2.reset();
+
+        c.r2_move();
+        c.r2_move();
+
+        assert_eq!(c, c2);
     }
 
     #[test]
@@ -551,6 +580,14 @@ mod tests {
         c2.u_move();
 
         assert_eq!(c, c2);
+
+        c.reset();
+        c2.reset();
+
+        c.u2_move();
+        c.u2_move();
+
+        assert_eq!(c, c2);
     }
 
     #[test]
@@ -570,6 +607,14 @@ mod tests {
         c2.f_move();
         c2.f_move();
         c.fp_move();
+
+        assert_eq!(c, c2);
+
+        c.reset();
+        c2.reset();
+
+        c.f2_move();
+        c.f2_move();
 
         assert_eq!(c, c2);
     }
