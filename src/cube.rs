@@ -107,7 +107,6 @@ impl Cube {
                     {
                         forward_path.insert(c2.to_i(), (c.to_i(), *m));
                         c.copy(c2);
-                        println!("Break Forward");
                         break 'main_loop;
                     } else {
                         if !forward_visited.contains(&c2.to_i()) {
@@ -416,61 +415,18 @@ impl Cube {
         let mut rng = rand::thread_rng();
         let n = rng.gen_range(0, 9);
 
-        //match n {
-        //0 => self.r_move(),
-        //1 => self.r2_move(),
-        //2 => self.rp_move(),
-
-        //3 => self.u_move(),
-        //4 => self.u2_move(),
-        //5 => self.up_move(),
-
-        //6 => self.f_move(),
-        //7 => self.f2_move(),
-        //8 => self.fp_move(),
-
-        //_ => self.random_move(),
-        //}
-
         match n {
-            0 => {
-                print!("R  ");
-                self.r_move()
-            }
-            1 => {
-                print!("R2 ");
-                self.r2_move()
-            }
-            2 => {
-                print!("R' ");
-                self.rp_move()
-            }
+            0 => self.r_move(),
+            1 => self.r2_move(),
+            2 => self.rp_move(),
 
-            3 => {
-                print!("U  ");
-                self.u_move()
-            }
-            4 => {
-                print!("U2 ");
-                self.u2_move()
-            }
-            5 => {
-                print!("U' ");
-                self.up_move()
-            }
+            3 => self.u_move(),
+            4 => self.u2_move(),
+            5 => self.up_move(),
 
-            6 => {
-                print!("F  ");
-                self.f_move()
-            }
-            7 => {
-                print!("F2 ");
-                self.f2_move()
-            }
-            8 => {
-                print!("F' ");
-                self.fp_move()
-            }
+            6 => self.f_move(),
+            7 => self.f2_move(),
+            8 => self.fp_move(),
 
             _ => self.random_move(),
         }
@@ -480,7 +436,6 @@ impl Cube {
         for _ in 0..n {
             self.random_move();
         }
-        println!();
     }
 
     pub fn is_solved(&self) -> bool {
