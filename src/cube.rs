@@ -69,12 +69,21 @@ impl Cube {
     pub fn from_string(&mut self, input: String) {
         assert_eq!(input.chars().count(), 24);
 
-        //for m in ['U', 'F', 'R', 'D', 'B', 'L'].iter() {
         for m in ['W', 'R', 'B', 'Y', 'O', 'G'].iter() {
             assert_eq!(input.matches(*m).count(), 4);
         }
 
-        let f = "UUUURRRRFFFFDDDDLLLLBBBB";
+        let mut o = [-1; 8];
+        let mut p = vec![
+            defs::Corner::URF,
+            defs::Corner::URF,
+            defs::Corner::URF,
+            defs::Corner::URF,
+            defs::Corner::URF,
+            defs::Corner::URF,
+            defs::Corner::URF,
+            defs::Corner::URF,
+        ];
 
         for i in 0..8 {
             let corner = defs::int_to_corner(i);

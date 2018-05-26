@@ -5,7 +5,7 @@ fn main() {
     let mut c = cube::Cube::init();
 
     //let cubestring = "FFBLBRDLDUBRRFDDLRLUUUFB".to_string();
-    let cubestring = "WOWOBBYORWBBRRYYGGRWYOGG".to_string();
+    let cubestring = "WOWOBBYORWBBRRYYGGRWYOGG".to_string(); // R' U
 
     c.from_string(cubestring);
 

@@ -28,15 +28,15 @@ pub enum Facelet {
     B4 = 23,
 }
 
-//#[derive(Copy, Clone, Debug)]
-//pub enum Color {
-//U, // = 0
-//R, // = 1
-//F, // = 2
-//D, // = 3
-//L, // = 4
-//B, // = 5
-//}
+#[derive(Copy, Clone, Debug)]
+pub enum Color {
+    U = 0,
+    R = 1,
+    F = 2,
+    D = 3,
+    L = 4,
+    B = 5,
+}
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Corner {
@@ -52,15 +52,15 @@ pub enum Corner {
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Move {
-    U1, // = 0
-    U2, // = 1
-    U3, // = 2
-    R1, // = 3
-    R2, // = 4
-    R3, // = 5
-    F1, // = 6
-    F2, // = 7
-    F3, // = 8
+    U1 = 0,
+    U2 = 1,
+    U3 = 2,
+    R1 = 3,
+    R2 = 4,
+    R3 = 5,
+    F1 = 6,
+    F2 = 7,
+    F3 = 8,
 }
 
 impl Move {
@@ -178,16 +178,16 @@ pub const cornerFacelet: [[Facelet; 3]; 8] = [
     [Facelet::D3, Facelet::B4, Facelet::L3],
 ];
 
-//pub const cornerColor: [[Color; 3]; 8] = [
-//[Color::U, Color::R, Color::F],
-//[Color::U, Color::F, Color::L],
-//[Color::U, Color::L, Color::B],
-//[Color::U, Color::B, Color::R],
-//[Color::D, Color::R, Color::B],
-//[Color::D, Color::F, Color::R],
-//[Color::D, Color::L, Color::F],
-//[Color::D, Color::B, Color::L],
-//];
+pub const cornerColor: [[Color; 3]; 8] = [
+    [Color::U, Color::R, Color::F],
+    [Color::U, Color::F, Color::L],
+    [Color::U, Color::L, Color::B],
+    [Color::U, Color::B, Color::R],
+    [Color::D, Color::R, Color::B],
+    [Color::D, Color::F, Color::R],
+    [Color::D, Color::L, Color::F],
+    [Color::D, Color::B, Color::L],
+];
 
 //pub const N_MOVE: i64 = 9; //  number of possible face moves
 //pub const N_TWIST: i64 = 729; //  3^6 possible corner orientations
