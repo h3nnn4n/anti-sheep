@@ -4,6 +4,7 @@ use defs;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::collections::VecDeque;
+use std::str;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Cube {
@@ -36,8 +37,55 @@ impl Cube {
         *self = Cube::init();
     }
 
+    /* This nice description was copied from https://github.com/hkociemba/Rubiks2x2x2-OptimalSolver/blob/master/face.py
+     *
+     *
+     *    The names of the facelet positions of the cube
+     *              |********|
+     *              |*U1**U2*|
+     *              |********|
+     *              |*U3**U4*|
+     *              |********|
+     *     |********|********|********|********|
+     *     |*L1**L2*|*F1**F2*|*R1**R2*|*B1**B2*|
+     *     |********|********|********|********|
+     *     |*L3**L4*|*F3**F4*|*R3**R4*|*B3**B4*|
+     *     |********|********|********|********|
+     *              |********|
+     *              |*D1**D2*|
+     *              |********|
+     *              |*D3**D4*|
+     *              |********|
+     *
+     *    U1, U2, U3, U4, R1, R2, R3, R4, F1, F2, F3, F4,
+     *    D1, D2, D3, D4, L1, L2, L3, L4, B1, B2, B3, B4
+     *
+     *    A cube definition string "UBL..." means for example: In position U1 we have the U-color, in position U2 we have the
+     *    B-color, in position U3 we have the L color etc. according to the order U1, U2, U3, U4, R1, R2, R3, R4, F1, F2, F3,
+     *    F4, D1, D2, D3, D4, L1, L2, L3, L4, B1, B2, B3, B4 of the enum constants.
+     *
+     */
+
     pub fn from_string(&mut self, input: String) {
-        assert!(input.chars().count() == 24);
+        assert_eq!(input.chars().count(), 24);
+
+        //for m in ['U', 'F', 'R', 'D', 'B', 'L'].iter() {
+        for m in ['W', 'R', 'B', 'Y', 'O', 'G'].iter() {
+            assert_eq!(input.matches(*m).count(), 4);
+        }
+
+        let f = "UUUURRRRFFFFDDDDLLLLBBBB";
+
+        for i in 0..8 {
+            let corner = defs::int_to_corner(i);
+            let cf = defs::cornerFacelet[i as usize];
+            let w = (0..3)
+                .map(|x| input.chars().nth(cf[x] as usize).unwrap())
+                .collect::<String>();
+
+            println!("{}", w);
+        }
+
         return;
     }
 
@@ -395,6 +443,8 @@ impl Cube {
         assert!(s % 3 == 0);
 
         for i in 0..8 {
+            assert!(self.o[i] >= 0);
+
             self.o[i] = self.o[i] % 3;
         }
     }
