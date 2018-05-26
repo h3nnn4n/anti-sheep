@@ -68,9 +68,9 @@ impl Cube {
     }
 
     pub fn solve(&self) -> Vec<defs::Move> {
-        self.solve_forward_bfs()
+        //self.solve_forward_bfs()
         //self.solve_reverse_bfs()
-        //self.solve_double_headed_bfs()
+        self.solve_double_headed_bfs()
     }
 
     pub fn solve_double_headed_bfs(&self) -> Vec<defs::Move> {
@@ -642,8 +642,11 @@ mod tests {
         solve_2: 2,
         solve_3: 3,
         solve_4: 4,
-        //solve_5: 5,
-        //solve_6: 6,
-        //solve_7: 7,
+        solve_5: 5,
+        solve_6: 6,
+        solve_7: 7,
+        solve_8: 8,
+        solve_9: 9,
+        solve_10: 10,
     }
 }
