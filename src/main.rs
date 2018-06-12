@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 mod cube;
 mod defs;
 
@@ -5,13 +7,22 @@ fn main() {
     let mut c = cube::Cube::init();
 
     //let cubestring = "FFBLBRDLDUBRRFDDLRLUUUFB".to_string();
-    let cubestring = "WOWOBBYORWBBRRYYGGRWYOGG".to_string(); // R' U
+    //let cubestring = "WOWOBBYORWBBRRYYGGRWYOGG".to_string(); // R' U
 
-    c.from_string(cubestring);
+    //c.from_string(cubestring);
 
-    let solve_sequence = c.solve_double_headed_bfs();
+    for _ in 0..1000 {
+        c.random_shuffle(30);
 
-    c.do_move_sequence(solve_sequence);
+        let t_start = Instant::now();
+        let solve_sequence = c.solve();
+        let t_end = Instant::now();
 
-    assert!(c.is_solved());
+        let diff = t_end.duration_since(t_start);
+        println!("{:?}.{:?}", diff.as_secs(), diff.subsec_nanos());
+
+        c.do_move_sequence(solve_sequence);
+
+        assert!(c.is_solved());
+    }
 }

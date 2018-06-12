@@ -61,16 +61,17 @@ pub enum Move {
     F1 = 6,
     F2 = 7,
     F3 = 8,
+    I0 = 9, // Identity move i.e do nothing
 }
 
 impl Move {
-    pub fn iterator_ftm() -> Iter<'static, Move> {
+    pub fn iterator_htm() -> Iter<'static, Move> {
         static MOVES: [Move; 6] = [Move::U1, Move::U3, Move::R1, Move::R3, Move::F1, Move::F3];
 
         MOVES.into_iter()
     }
 
-    pub fn iterator_htm() -> Iter<'static, Move> {
+    pub fn iterator_ftm() -> Iter<'static, Move> {
         static MOVES: [Move; 9] = [
             Move::U1,
             Move::U2,
@@ -110,6 +111,7 @@ impl Move {
                 Move::F1 => Move::F3,
                 Move::F2 => Move::F2,
                 Move::F3 => Move::F1,
+                Move::I0 => Move::I0,
             })
         }
 
@@ -133,6 +135,7 @@ impl Move {
                 Move::F1 => "F'".to_string(),
                 Move::F2 => "F2".to_string(),
                 Move::F3 => "F'".to_string(),
+                Move::I0 => "I ".to_string(),
             })
         }
 
@@ -219,6 +222,50 @@ pub fn int_to_move(n: i32) -> Move {
         7 => Move::F2,
         8 => Move::F3,
         _ => panic!("Invalid Move ID"),
+    }
+}
+
+pub fn redundant_move(a: Move, b: Move) -> bool {
+    return false;
+
+    match (a, b) {
+        (Move::U1, Move::U1) => true,
+        (Move::U1, Move::U2) => true,
+        (Move::U1, Move::U3) => true,
+
+        (Move::U2, Move::U1) => true,
+        (Move::U2, Move::U2) => true,
+        (Move::U2, Move::U3) => true,
+
+        (Move::U3, Move::U1) => true,
+        (Move::U3, Move::U2) => true,
+        (Move::U3, Move::U3) => true,
+
+        (Move::R1, Move::R1) => true,
+        (Move::R1, Move::R2) => true,
+        (Move::R1, Move::R3) => true,
+
+        (Move::R2, Move::R1) => true,
+        (Move::R2, Move::R2) => true,
+        (Move::R2, Move::R3) => true,
+
+        (Move::R3, Move::R1) => true,
+        (Move::R3, Move::R2) => true,
+        (Move::R3, Move::R3) => true,
+
+        (Move::F1, Move::F1) => true,
+        (Move::F1, Move::F2) => true,
+        (Move::F1, Move::F3) => true,
+
+        (Move::F2, Move::F1) => true,
+        (Move::F2, Move::F2) => true,
+        (Move::F2, Move::F3) => true,
+
+        (Move::F3, Move::F1) => true,
+        (Move::F3, Move::F2) => true,
+        (Move::F3, Move::F3) => true,
+
+        _ => false,
     }
 }
 
