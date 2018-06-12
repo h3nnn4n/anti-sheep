@@ -560,7 +560,7 @@ impl Cube {
 
         for _ in 0..n {
             last = mov;
-            while mov == last {
+            while defs::redundant_move(mov, last) {
                 m = rng.gen_range(0, 9);
                 mov = defs::int_to_move(m);
             }
