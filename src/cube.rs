@@ -4,7 +4,6 @@ use defs;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::collections::VecDeque;
-use std::str;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Cube {
@@ -33,6 +32,7 @@ impl Cube {
         }
     }
 
+    #[allow(dead_code)]
     pub fn reset(&mut self) {
         *self = Cube::init();
     }
@@ -66,37 +66,37 @@ impl Cube {
      *
      */
 
-    pub fn from_string(&mut self, input: String) {
-        assert_eq!(input.chars().count(), 24);
+    //pub fn from_string(&mut self, input: String) {
+    //assert_eq!(input.chars().count(), 24);
 
-        for m in ['W', 'R', 'B', 'Y', 'O', 'G'].iter() {
-            assert_eq!(input.matches(*m).count(), 4);
-        }
+    //for m in ['W', 'R', 'B', 'Y', 'O', 'G'].iter() {
+    //assert_eq!(input.matches(*m).count(), 4);
+    //}
 
-        let mut o = [-1; 8];
-        let mut p = vec![
-            defs::Corner::URF,
-            defs::Corner::URF,
-            defs::Corner::URF,
-            defs::Corner::URF,
-            defs::Corner::URF,
-            defs::Corner::URF,
-            defs::Corner::URF,
-            defs::Corner::URF,
-        ];
+    //let mut o = [-1; 8];
+    //let mut p = vec![
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //defs::Corner::URF,
+    //];
 
-        for i in 0..8 {
-            let corner = defs::int_to_corner(i);
-            let cf = defs::cornerFacelet[i as usize];
-            let w = (0..3)
-                .map(|x| input.chars().nth(cf[x] as usize).unwrap())
-                .collect::<String>();
+    //for i in 0..8 {
+    //let corner = defs::int_to_corner(i);
+    //let cf = defs::CORNER_FACELET[i as usize];
+    //let w = (0..3)
+    //.map(|x| input.chars().nth(cf[x] as usize).unwrap())
+    //.collect::<String>();
 
-            println!("{}", w);
-        }
+    //println!("{}", w);
+    //}
 
-        return;
-    }
+    //return;
+    //}
 
     pub fn from_i(&mut self, (_p, _o): (i64, i64)) {
         let mut p = _p;
@@ -255,6 +255,7 @@ impl Cube {
         path
     }
 
+    #[allow(dead_code)]
     pub fn solve_reverse_bfs(&self) -> Vec<defs::Move> {
         let mut reverse_queue: VecDeque<((i64, i64), defs::Move)> = VecDeque::new();
         let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
@@ -317,6 +318,7 @@ impl Cube {
         }
     }
 
+    #[allow(dead_code)]
     pub fn solve_forward_bfs(&self) -> Vec<defs::Move> {
         let mut q: VecDeque<((i64, i64), defs::Move)> = VecDeque::new();
         let mut reverse_path: HashMap<(i64, i64), ((i64, i64), defs::Move)> = HashMap::new();
@@ -545,6 +547,7 @@ impl Cube {
         }
     }
 
+    #[allow(dead_code)]
     pub fn random_move(&mut self) {
         let mut rng = rand::thread_rng();
         let n = rng.gen_range(0, 9);

@@ -87,6 +87,7 @@ impl Move {
         MOVES.into_iter()
     }
 
+    #[allow(dead_code)]
     pub fn print_formated(seq: Vec<Move>) {
         let formated = Move::format_move_sequence(seq);
 
@@ -170,7 +171,8 @@ impl Move {
     }
 }
 
-pub const cornerFacelet: [[Facelet; 3]; 8] = [
+#[allow(dead_code)]
+pub const CORNER_FACELET: [[Facelet; 3]; 8] = [
     [Facelet::U4, Facelet::R1, Facelet::F2],
     [Facelet::U3, Facelet::F1, Facelet::L2],
     [Facelet::U1, Facelet::L1, Facelet::B2],
@@ -181,7 +183,8 @@ pub const cornerFacelet: [[Facelet; 3]; 8] = [
     [Facelet::D3, Facelet::B4, Facelet::L3],
 ];
 
-pub const cornerColor: [[Color; 3]; 8] = [
+#[allow(dead_code)]
+pub const CORNER_COLOR: [[Color; 3]; 8] = [
     [Color::U, Color::R, Color::F],
     [Color::U, Color::F, Color::L],
     [Color::U, Color::L, Color::B],
