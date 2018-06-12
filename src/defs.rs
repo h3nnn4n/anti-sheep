@@ -226,8 +226,6 @@ pub fn int_to_move(n: i32) -> Move {
 }
 
 pub fn redundant_move(a: Move, b: Move) -> bool {
-    return false;
-
     match (a, b) {
         (Move::U1, Move::U1) => true,
         (Move::U1, Move::U2) => true,
