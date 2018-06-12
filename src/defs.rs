@@ -277,7 +277,7 @@ mod tests {
     #[test]
     fn reverse() {
         let mut c1 = cube::Cube::init();
-        let mut c2 = cube::Cube::init();
+        let c2 = cube::Cube::init();
 
         for _ in 0..5 {
             c1.random_shuffle(8);
