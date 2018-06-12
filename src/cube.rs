@@ -724,12 +724,12 @@ mod tests {
         }
     }
 
-    #[test]
-    #[should_panic]
-    fn from_string_wrong() {
-        let mut c = super::Cube::init();
-        c.from_string("HAHA".to_string());
-    }
+    //#[test]
+    //#[should_panic]
+    //fn from_string_wrong() {
+    //let mut c = super::Cube::init();
+    //c.from_string("HAHA".to_string());
+    //}
 
     #[test]
     fn compare_solver_forward_reverse() {
